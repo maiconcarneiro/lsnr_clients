@@ -2,13 +2,13 @@
 # Blog do Dibiei | Aprender e compartilhar !
 # Maicon Carneiro | Salvador-BA, 08/01/2021
 # lsnr_clients.sh - v1.2
-# Script para analisar Log do Listener e gerar lista de IPs que conectaram no banco de dados Oracle
+# Script para analizar Log do Listener e gerar lista de IPs que conectaram no banco de dados Oracle
 #
 # Exemplo: ./lsnr_clients.sh 15 s PRD.dibiei.com LISTENER_PRD
-# Instruções de uso em dibiei.wordpress.com
+# Instrucoes de uso em dibiei.wordpress.com
 #
-# Data       | Autor              | Modificação
-# 10/01/2022 | Maicon Carneiro    | Código para identificar o diretório do listener automaticamente
+# Data       | Autor              | Modificacao
+# 10/01/2022 | Maicon Carneiro    | Codigo para identificar o diretorio do listener automaticamente
 
 dataArquivo=$(date +'%H%M%S')
 dirInicial=$(pwd)
@@ -54,8 +54,8 @@ ownerListener=$(echo "$linhaListener" | awk '{ print $1 }')
 
 usuarioAtual=$(whoami)
 if [ "$usuarioAtual" != "$ownerListener" ]; then
-echo "Erro: O script deve ser executado com o usuário que é dono do Listener!"
-echo "Execute o script com o usuário $ownerListener"
+echo "Erro: O script deve ser executado com o usuario dono do Listener!"
+echo "Execute o script com o usuario $ownerListener"
 exit 1;
 fi
 
@@ -65,11 +65,11 @@ dirLogListener=$($ORACLE_HOME/bin/lsnrctl show log_directory $nomeListener | gre
 
 echo "*********************************************************************************"
 echo "Servidor..................: $(hostname)"
-echo "Data da análise...........: $(date +'%d/%m/%Y %H:%M:%S')"
-echo "Útima modificação do log..: $periodo (dias)"
+echo "Data da analise...........: $(date +'%d/%m/%Y %H:%M:%S')"
+echo "Utima modificacao do log..: $periodo (dias)"
 echo "Nome do Listener..........: $nomeListener"
 echo "Dono do Listener..........: $ownerListener"
-echo "Binário do Listener.......: $binarioListener"
+echo "Binario do Listener.......: $binarioListener"
 echo "Service Name..............: $nomeServico"
 echo ""
 echo "Arquivos de log analisados:"
@@ -117,7 +117,7 @@ done
 # ordena o resultado pelo numero de conexoes
 sort -k 2n $arquivoContagemStage >> $arquivoContagem
 
-echo "Contagem de conexões por IP:"
+echo "Contagem de conexoes por IP:"
 echo "==========================="
 echo "      HOST        Qtde"
 echo "==========================="
@@ -125,7 +125,7 @@ echo "==========================="
 cat $arquivoContagem
 
 echo "==========================="
-echo "Contagem concluída com sucesso."
+echo "Contagem concluida com sucesso."
 echo ""
 
 fi
