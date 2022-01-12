@@ -2,7 +2,7 @@
 # Blog do Dibiei | Aprender e compartilhar !
 # Maicon Carneiro | Salvador-BA, 08/01/2021
 # lsnr_clients.sh - v1.2
-# Script para analizar Log do Listener e gerar lista de IPs que conectaram no banco de dados Oracle
+# Script para analisar Log do Listener e gerar lista de IPs que conectaram no banco de dados Oracle
 #
 # Exemplo: ./lsnr_clients.sh 15 s PRD.dibiei.com LISTENER_PRD
 # Instruções de uso em dibiei.wordpress.com
