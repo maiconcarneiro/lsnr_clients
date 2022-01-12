@@ -11,6 +11,7 @@ Script para analisar Log do Listener e gerar lista de IPs que conectaram no banc
 Ex: sh lsnr_clients.sh
 
 Parâmetros opcionais:
+
 sh lsnr_clients.sh intervalo gera_contagem servico listener 
 
 Exemplo com todos os parâmetros:
