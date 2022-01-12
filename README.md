@@ -8,7 +8,8 @@ Script para analisar Log do Listener e gerar lista de IPs que conectaram no banc
  wget "https://raw.githubusercontent.com/maiconcarneiro/lsnr_clients/main/lsnr_clients.sh"; chmod +x lsnr_clients.sh
 
 3) Execute o script no shell
-Ex: sh lsnr_clients.sh
+
+sh lsnr_clients.sh
 
 
 
