@@ -5,23 +5,24 @@ Script para analisar Log do Listener e gerar lista de IPs que conectaram no banc
 
 2) Crie o script lsnr_clients.sh no servidor de banco de dados e cole o conteúdo do script.
  Se tiver acesso a internet, pode usar o comando abaixo para baixar o script:
- wget "https://raw.githubusercontent.com/maiconcarneiro/lsnr_clients/main/lsnr_clients.sh"; chmod +x lsnr_clients.sh
+ 
+   $ wget "https://raw.githubusercontent.com/maiconcarneiro/lsnr_clients/main/lsnr_clients.sh"; chmod +x lsnr_clients.sh
 
 3) Execute o script no shell
 
-sh lsnr_clients.sh
+  $ sh lsnr_clients.sh
 
 
 
 Parâmetros opcionais:
 
-sh lsnr_clients.sh intervalo gera_contagem servico listener 
+  $ sh lsnr_clients.sh intervalo gera_contagem servico listener 
 
 
 
 Exemplo com todos os parâmetros:
 
-sh lsnr_clients.sh 30 s XPTOPRD LISTENERPROD
+  $ sh lsnr_clients.sh 30 s XPTOPRD LISTENERPROD
 
 
 
