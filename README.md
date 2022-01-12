@@ -10,12 +10,19 @@ Script para analisar Log do Listener e gerar lista de IPs que conectaram no banc
 3) Execute o script no shell
 Ex: sh lsnr_clients.sh
 
+
+
 Parâmetros opcionais:
 
 sh lsnr_clients.sh intervalo gera_contagem servico listener 
 
+
+
 Exemplo com todos os parâmetros:
+
 sh lsnr_clients.sh 30 s XPTOPRD LISTENERPROD
+
+
 
 Onde:
 30 --> Intervalo de 30 dias (pega todos os arquivos de log com data de alteração nos últimos 30 dias)
