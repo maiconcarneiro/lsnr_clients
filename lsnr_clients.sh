@@ -1,12 +1,13 @@
 #!/bin/bash
-# Blog do Dibiei | Aprender e compartilhar!
-# Maicon Carneiro | Salvador-BA, 08/01/2021
 # lsnr_clients.sh - v1.3
 # Script para analizar Log do Listener e gerar lista de IPs que conectaram no banco de dados Oracle
 #
-# Exemplo: ./lsnr_clients.sh 15 s PRD.dibiei.com LISTENER_PRD
-# Instrucoes de uso em dibiei.wordpress.com
-# wget "https://raw.githubusercontent.com/maiconcarneiro/lsnr_clients/main/lsnr_clients.sh"; chmod +x lsnr_clients.sh
+# Instrucoes de uso no Blog do Dibiei
+# "https://dibiei.wordpress.com/2022/01/12/gerando-lista-de-ips-que-conectaram-no-banco-de-dados-atraves-do-log-do-listener-script-lsnr_clients-sh/"
+#
+# Download: wget "https://raw.githubusercontent.com/maiconcarneiro/lsnr_clients/main/lsnr_clients.sh"; chmod +x lsnr_clients.sh
+# Exemplo simples..: ./lsnr_clients.sh
+# Exemplo full.....: ./lsnr_clients.sh -i 15 -c s - s ORCL -l LISTENER_PRD
 #
 # Data       | Autor              | Modificacao
 # 10/01/2022 | Maicon Carneiro    | Codigo para identificar o diretorio do listener automaticamente
@@ -43,8 +44,6 @@ arquivoContagem="$dirInicial/lsnrchkip_cont_$dataArquivo.txt"
 arquivoContagemStage="$dirInicial/lsnrchkip_cont_stage_$dataArquivo.txt"
 arquivoScriptLsnrctl="$dirInicial/lsnrchkip_lsnrctl_$dataArquivo.sh"
 
-ORACLE_HOME=""
-
 LimpaArquivosTemporarios()
 {
    rm -f $arquivoConexoes
@@ -53,18 +52,6 @@ LimpaArquivosTemporarios()
    rm -f $arquivoContagemStage
    rm -f $arquivoScriptLsnrctl
 }
-
-GetOracleHome()
-{
-   ORACLE_HOME=$(echo "$1" | sed -e "s/tnslsnr//g")
-   cd $ORACLE_HOME/..
-   ORACLE_HOME=$(pwd)
-   cd $dirInicial
-}
-
-if [ -z "$periodo" ]; then
- periodo="1"
-fi
 
 # Senão for informado, assume primeiro listener encontrado no servidor
 if [ -z "$nomeListener" ]; then
@@ -87,8 +74,8 @@ echo "Execute o script com o usuario $ownerListener"
 exit 1;
 fi
 
-binarioListener=$(echo "$linhaListener" | awk '{ print $8 }')
-GetOracleHome $binarioListener
+pidListener=$(echo "$linhaListener" | awk '{ print $2 }')
+ORACLE_HOME=$(strings /proc/$pidListener/environ | grep ORACLE_HOME | awk -F "=" '{print $2}')
 
 # obtem o diretorio de log do listener (11gR2da problema quando nao usa o current_listener )
 echo "$ORACLE_HOME/bin/lsnrctl <<EOF
@@ -106,16 +93,14 @@ echo "Data da analise...........: $(date +'%d/%m/%Y %H:%M:%S')"
 echo "Utima modificacao do log..: $periodo (dias)"
 echo "Nome do Listener..........: $nomeListener"
 echo "Dono do Listener..........: $ownerListener"
-echo "Binario do Listener.......: $binarioListener"
+echo "Binario do Listener.......: $ORACLE_HOME"
 echo "Service Name..............: $nomeServico"
 echo ""
 echo "Arquivos de log analisados:"
-#echo "---------------------------------------------------------------------------------"
  find $dirLogListener -mtime -$periodo | grep -i "$nomeListener" | grep .log | egrep -v '.gz|.zip'
 echo ""
 echo "*********************************************************************************"
 
-LimpaArquivosTemporarios
 cd $dirLogListener
 for arquivo in $(find . -mtime -$periodo | grep -i "$nomeListener" | grep .log | egrep -v '.gz|.zip')
 do
@@ -146,7 +131,6 @@ if [ "$geraContagem" = "s" ]; then
 for IP in $(cat $arquivoListaIP | uniq)
 do
  QtConexoes=$(grep -wc $IP $arquivoListaIP)
- #echo "$IP $QtConexoes" >> $arquivoContagemStage
   line='               '
  printf "%s %s $QtConexoes\n" $IP "${line:${#IP}}" >> $arquivoContagemStage
 done
@@ -158,12 +142,11 @@ echo "Contagem de conexoes por IP:"
 echo "==========================="
 echo "      HOST        Qtde"
 echo "==========================="
-
-cat $arquivoContagem
-
+ cat $arquivoContagem
 echo "==========================="
-echo "Contagem concluida com sucesso."
-echo ""
 
 fi
+
 LimpaArquivosTemporarios
+echo "Analise concluida com sucesso em $(date +'%d/%m/%Y %H:%M:%S')"
+echo ""
